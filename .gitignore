@@ -1,0 +1,11 @@
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# local env files
+.env*.local
