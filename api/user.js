@@ -16,13 +16,13 @@ router.post("/register", urlencodedParser, async (req, res) => {
 
 router.post("/login", urlencodedParser, async (req, res) => {
   if ((await isUserAuth(test, "asasdasd")) == true) {
+    const token = await createAccessToken(test);
+
     res.status(200).send({
       status: 200,
       message: "Login successful",
+      accessToken: token,
     });
-    const testy = await createAccessToken(test);
-
-    console.log(testy);
   } else {
     res.status(401).send({ status: 401, message: "Login unsuccessfull" });
   }
