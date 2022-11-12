@@ -16,17 +16,6 @@ exports.userExists = async (username) => {
     });
   return result;
 };
-
-// ADD USER
-
-// DELETE USER
-
-// GET USER BY ...
-
-// UPDATE USER
-// GENERCIC whatver they want
-// PASWORD REQUEST
-
 exports.addUser = (username, password, email) => {
   let noErr = true;
   bcrypt.hash(password, saltRounds, (err, data) => {
