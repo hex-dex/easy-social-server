@@ -1,10 +1,7 @@
-var express = require('express');
-var router = express.Router();
+// THIS IS THE SOURCE OF ALL CONTROLLERS (CONTROLLERS ARE FUNCTIONS THAT GET HIT ON AN ENDPORT) IF YOU DONT KNOW WHAT ENDPOINTS ARE THEN FUCK YOU
+function routes(app, { urlencodedParser }) {
+  app.use("/user", require("./user"));
+  app.use("/post", require("./post"));
+}
 
-router.use('/users', require('./users'));
-
-router.get('/', (req, res) => {
-  res.json({ body: 'Hello World' });
-});
-
-module.exports = router;
+module.exports = routes;

@@ -8,4 +8,4 @@
 /coverage
 
 # local env files
-.env*.local
+.env
