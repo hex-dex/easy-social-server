@@ -16,25 +16,26 @@ exports.userExists = async (username) => {
     });
   return result;
 };
-exports.addUser = (username, password, email) => {
+exports.addUser = async (username, password, email) => {
   let noErr = true;
   let saltRounds = 12;
-  bcrypt.hash(password, saltRounds, (err, data) => {
-    conn.query(
-      `INSERT INTO users (username,password,email,date_joined) VALUES ('${username}','${data}','${email}', '${new Date()}')`,
-      (err, result) => {
-        if (err) noErr = false;
-      }
-    );
-  });
-  return noErr;
+  const hashedPassword = bcrypt.hashSync(password, saltRounds);
+  const id = await conn
+    .promise()
+    .query(
+      `INSERT INTO users (username, password, email, date_joined) VALUES ('${username}','${hashedPassword}','${email}', '${new Date()}')`
+    )
+    .then(([rows, fields]) => {
+      return rows.insertId;
+    });
+  return id;
 };
 
 exports.isUserAuth = async (username, password) => {
   const user = await conn
     .promise()
     .query(
-      `SELECT username, password from users WHERE username = '${username}'`
+      `SELECT username, password from users  WHERE username = '${username}'`
     )
     .then(([rows, fields]) => {
       return rows;
@@ -43,18 +44,9 @@ exports.isUserAuth = async (username, password) => {
   return isAuth;
 };
 
-exports.createAccessToken = async (username) => {
-  const getUUID = await conn
-    .promise()
-    .query(`SELECT id, username from users WHERE username = '${username}'`)
-    .then(([rows, fields]) => {
-      return rows[0];
-    });
-  const tokenGen = (userID, username) => {
-    const token = jwt.sign({ id: userID, username }, process.env.ACCESS_TOKEN, {
-      expiresIn: "10m",
-    });
-    return token;
-  };
-  return tokenGen(getUUID.username, getUUID.id);
+exports.createAccessToken = (userId, username) => {
+  const token = jwt.sign({ id: userId, username }, process.env.ACCESS_TOKEN, {
+    expiresIn: "10m",
+  });
+  return token;
 };
