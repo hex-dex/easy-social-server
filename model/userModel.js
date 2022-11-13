@@ -18,6 +18,7 @@ exports.userExists = async (username) => {
 };
 exports.addUser = (username, password, email) => {
   let noErr = true;
+  let saltRounds = 12;
   bcrypt.hash(password, saltRounds, (err, data) => {
     conn.query(
       `INSERT INTO users (username,password,email,date_joined) VALUES ('${username}','${data}','${email}', '${new Date()}')`,
