@@ -8,17 +8,20 @@ const {
   addUser,
   createAccessToken,
 } = require("../model/userModel");
+router.use(bodyParser.json());
 
 /* GET users listing. */
-router.post("/register", urlencodedParser, async (req, res) => {
+router.post("/register", async (req, res) => {
   const { username, password, email } = req.body;
+  console.log(req.body, "<== BODY");
   if ((await userExists(username)) == true) {
     return res
       .status(409)
       .send({ status: 409, message: "User already exists" });
   }
-  addUser(username, password, email);
-  const token = await createAccessToken(username);
+
+  const userId = addUser(username, password, email);
+  const token = await createAccessToken(userId, username);
   res.cookie("access-token", token);
   res.status(201).send({ status: 201, message: "User successfully created" });
 });
