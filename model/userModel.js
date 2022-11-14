@@ -1,7 +1,6 @@
 const mysql = require("mysql2");
 require("dotenv").config();
 const conn = mysql.createConnection(process.env.DATABASE_URL);
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 exports.userExists = async (username) => {
@@ -42,11 +41,4 @@ exports.isUserAuth = async (username, password) => {
     });
   const isAuth = bcrypt.compareSync(password, user[0].password);
   return isAuth;
-};
-
-exports.createAccessToken = (userId, username) => {
-  const token = jwt.sign({ id: userId, username }, process.env.ACCESS_TOKEN, {
-    expiresIn: "10m",
-  });
-  return token;
 };
