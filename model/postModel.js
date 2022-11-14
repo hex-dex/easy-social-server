@@ -15,6 +15,10 @@ const client = new Client({
 // Execute a query
 
 // Run the async function
+exports.getAllPost = async () => {
+  const showItems = await client.execute(`SELECT * FROM useractivities.posts`);
+  return showItems.rows;
+};
 exports.addPost = async (username, content) => {
   UUID = uuidv4();
   const addItem = await client.execute(
@@ -22,3 +26,4 @@ exports.addPost = async (username, content) => {
   );
   addItem;
 };
+//get posts
