@@ -2,18 +2,13 @@ var express = require("express");
 var router = express.Router();
 const bodyParser = require("body-parser");
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
-const {
-  userExists,
-  isUserAuth,
-  addUser,
-  createAccessToken,
-} = require("../model/userModel");
+const { userExists, isUserAuth, addUser } = require("../model/userModel");
+const { createAccessToken } = require("../service/tokenServices");
 router.use(bodyParser.json());
 
 /* GET users listing. */
 router.post("/register", async (req, res) => {
   const { username, password, email } = req.body;
-  console.log(req.body, "<== BODY");
   if ((await userExists(username)) == true) {
     return res
       .status(409)
@@ -40,7 +35,6 @@ router.post("/login", urlencodedParser, async (req, res) => {
   } else {
     res.status(401).send({ status: 401, message: "Login unsuccessfull" });
   }
-  res.send("hello - login");
 });
 
 module.exports = router;
