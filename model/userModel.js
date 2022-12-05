@@ -1,7 +1,7 @@
-const mysql = require("mysql2");
-require("dotenv").config();
+const mysql = require('mysql2');
+require('dotenv').config();
 const conn = mysql.createConnection(process.env.DATABASE_URL);
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcrypt');
 
 exports.userExists = async (username) => {
   const result = await conn
@@ -34,11 +34,19 @@ exports.isUserAuth = async (username, password) => {
   const user = await conn
     .promise()
     .query(
-      `SELECT username, password from users  WHERE username = '${username}'`
+      `SELECT username, password from users WHERE username = '${username}'`
     )
     .then(([rows, fields]) => {
-      return rows;
+      console.log(rows);
+      if (rows.length > 0) return rows[0];
+      return null;
     });
-  const isAuth = bcrypt.compareSync(password, user[0].password);
+  if (user == null) {
+    return false;
+  }
+  console.log(user);
+  const isAuth = bcrypt.compareSync(password, user.password);
+  console.log(isAuth);
+  // const isAuth = false;
   return isAuth;
 };
