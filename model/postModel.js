@@ -1,10 +1,10 @@
-const { Client } = require("cassandra-driver");
-const { v4: uuidv4 } = require("uuid");
+const { Client } = require('cassandra-driver');
+const { v4: uuidv4 } = require('uuid');
 
-require("dotenv").config();
+require('dotenv').config();
 const client = new Client({
   cloud: {
-    secureConnectBundle: "./secure-connect-posts.zip",
+    secureConnectBundle: './secure-connect-posts.zip',
   },
   credentials: {
     username: `${process.env.clientID}`,
