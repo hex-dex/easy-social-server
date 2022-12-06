@@ -24,6 +24,6 @@ exports.addPost = async (username, content) => {
   const addItem = await client.execute(
     `INSERT INTO useractivities.posts (post_ID, source_ID, post_content, date_created) VALUES ('${UUID}', '${username}', '${content}', '${new Date()}');`
   );
-  addItem;
+  // addItem;
 };
 //get posts
