@@ -1,20 +1,18 @@
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
-
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
+exports.createAccessToken = (userId, username) => {
+  const token = jwt.sign({ id: userId, username }, process.env.ACCESS_TOKEN, {
+    expiresIn: '30d',
+  });
+  return token;
+};
 exports.verifyToken = (cookieValue) => {
   const verifyToken = jwt.verify(
     cookieValue,
     process.env.ACCESS_TOKEN,
     (err, data) => {
-      return data.username;
+      return data.id;
     }
   );
   return verifyToken;
-};
-
-exports.createAccessToken = (userId, username) => {
-  const token = jwt.sign({ id: userId, username }, process.env.ACCESS_TOKEN, {
-    expiresIn: "1hr",
-  });
-  return token;
 };

@@ -9,6 +9,9 @@ const {
   showFriends,
 } = require("../model/friendsModel");
 const { createAccessToken } = require("../service/tokenServices");
+const { userExists, isUserAuth, addUser } = require("../model/userModel");
+const { createAccessToken } = require("../service/tokenServices");
+
 router.use(bodyParser.json());
 
 /* GET users listing. */
@@ -23,6 +26,7 @@ router.post("/register", async (req, res) => {
   const userId = addUser(username, password, email);
   const token = await createAccessToken(userId, username);
   res.cookie("access-token", token);
+  console.log(req.body);
   res.status(201).send({ status: 201, message: "User successfully created" });
 });
 
