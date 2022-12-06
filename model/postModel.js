@@ -1,10 +1,10 @@
-const { Client } = require("cassandra-driver");
-const { v4: uuidv4 } = require("uuid");
+const { Client } = require('cassandra-driver');
+const { v4: uuidv4 } = require('uuid');
 
-require("dotenv").config();
+require('dotenv').config();
 const client = new Client({
   cloud: {
-    secureConnectBundle: "./secure-connect-posts.zip",
+    secureConnectBundle: './secure-connect-posts.zip',
   },
   credentials: {
     username: `${process.env.clientID}`,
@@ -15,6 +15,10 @@ const client = new Client({
 // Execute a query
 
 // Run the async function
+exports.getAllPost = async () => {
+  const showItems = await client.execute(`SELECT * FROM useractivities.posts`);
+  return showItems.rows;
+};
 exports.addPost = async (username, content) => {
   UUID = uuidv4();
   const addItem = await client.execute(
@@ -22,3 +26,4 @@ exports.addPost = async (username, content) => {
   );
   addItem;
 };
+//get posts
