@@ -3,6 +3,11 @@ var router = express.Router();
 const bodyParser = require("body-parser");
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 const { userExists, isUserAuth, addUser } = require("../model/userModel");
+const {
+  requestFriend,
+  showPendingFriends,
+  showFriends,
+} = require("../model/friendsModel");
 const { createAccessToken } = require("../service/tokenServices");
 router.use(bodyParser.json());
 
@@ -36,5 +41,25 @@ router.post("/login", urlencodedParser, async (req, res) => {
     res.status(401).send({ status: 401, message: "Login unsuccessfull" });
   }
 });
-
+router.post("/add-friend", async (req, res) => {
+  const { username, srcID } = req.body;
+  requestFriend(username, srcID);
+  res.send("<h1>Hello </h1>");
+});
+router.post("/pending-requests", async (req, res) => {
+  const { username } = req.body;
+  let results = await showPendingFriends(username);
+  res.status(201).send({
+    status: 201,
+    data: results,
+  });
+});
+router.post("/my-friends", async (req, res) => {
+  const { username } = req.body;
+  let results = await showFriends(username);
+  res.status(201).send({
+    status: 201,
+    data: results,
+  });
+});
 module.exports = router;
