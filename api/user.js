@@ -8,8 +8,6 @@ const {
   showFriends,
 } = require("../model/friendsModel");
 const { createAccessToken } = require("../service/tokenServices");
-const { userExists, isUserAuth, addUser } = require("../model/userModel");
-const { createAccessToken } = require("../service/tokenServices");
 
 router.use(bodyParser.json());
 
@@ -45,17 +43,31 @@ router.post("/login", async (req, res) => {
   }
 });
 router.post("/add-friend", async (req, res) => {
-  const { username, srcID } = req.body;
-  requestFriend(username, srcID);
-  res.send("<h1>Hello </h1>");
+  const { username, targetID } = req.body;
+  if ((await userExists(targetID)) == true) {
+    requestFriend(username, targetID);
+
+    res.send({
+      status: 201,
+      message: "Freind request sent",
+    });
+  } else {
+    res.send({
+      status: 404,
+      message: "User not found",
+    });
+  }
 });
-router.post("/pending-requests", async (req, res) => {
+router.post("/show-pending-requests", async (req, res) => {
   const { username } = req.body;
   let results = await showPendingFriends(username);
   res.status(201).send({
     status: 201,
     data: results,
   });
+});
+router.post("/accept-request", async (req, res) => {
+  const { username } = req.body;
 });
 router.post("/my-friends", async (req, res) => {
   const { username } = req.body;
