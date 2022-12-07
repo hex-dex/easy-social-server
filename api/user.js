@@ -1,7 +1,6 @@
 var express = require("express");
 var router = express.Router();
 const bodyParser = require("body-parser");
-const urlencodedParser = bodyParser.urlencoded({ extended: false });
 const { userExists, isUserAuth, addUser } = require("../model/userModel");
 const {
   requestFriend,
@@ -30,7 +29,7 @@ router.post("/register", async (req, res) => {
   res.status(201).send({ status: 201, message: "User successfully created" });
 });
 
-router.post("/login", urlencodedParser, async (req, res) => {
+router.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
   if ((await isUserAuth(username, password)) == true) {
