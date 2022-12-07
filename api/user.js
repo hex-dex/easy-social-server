@@ -6,6 +6,7 @@ const {
   requestFriend,
   showPendingFriends,
   showFriends,
+  acceptRequest,
 } = require("../model/friendsModel");
 const { createAccessToken } = require("../service/tokenServices");
 
@@ -67,7 +68,12 @@ router.post("/show-pending-requests", async (req, res) => {
   });
 });
 router.post("/accept-request", async (req, res) => {
-  const { username } = req.body;
+  const { username, friendship_unique } = req.body;
+  acceptRequest(username, friendship_unique);
+  res.send({
+    status: 201,
+    message: "Friend request added",
+  });
 });
 router.post("/my-friends", async (req, res) => {
   const { username } = req.body;
