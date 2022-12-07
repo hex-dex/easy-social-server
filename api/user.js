@@ -8,8 +8,6 @@ const {
   showFriends,
 } = require("../model/friendsModel");
 const { createAccessToken } = require("../service/tokenServices");
-const { userExists, isUserAuth, addUser } = require("../model/userModel");
-const { createAccessToken } = require("../service/tokenServices");
 
 router.use(bodyParser.json());
 
