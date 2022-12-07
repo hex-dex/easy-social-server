@@ -57,3 +57,8 @@ exports.showFriends = async function (username) {
     });
   return res;
 };
+exports.acceptRequest = function (username, friendship_unique) {
+  const res = conn.query(
+    `UPDATE friends SET status = 'ACTIVE' WHERE target_user = '${username}' AND friendship_unique = '${friendship_unique}' `
+  );
+};
