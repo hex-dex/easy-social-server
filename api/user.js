@@ -1,7 +1,12 @@
 var express = require("express");
 var router = express.Router();
 const bodyParser = require("body-parser");
-const { userExists, isUserAuth, addUser } = require("../model/userModel");
+const {
+  userExists,
+  isUserAuth,
+  addUser,
+  getUser,
+} = require("../model/userModel");
 const {
   requestFriend,
   showPendingFriends,
@@ -43,22 +48,28 @@ router.post("/login", async (req, res) => {
     res.status(401).send({ status: 401, message: "Login unsuccessfull" });
   }
 });
+
 router.post("/add-friend", async (req, res) => {
   const { username, targetID } = req.body;
-  if ((await userExists(targetID)) == true) {
-    requestFriend(username, targetID);
-
-    res.send({
-      status: 201,
-      message: "Freind request sent",
-    });
-  } else {
-    res.send({
+  const targetUser = await getUser(targetID);
+  if (!targetUser)
+    return res.send({
       status: 404,
       message: "User not found",
     });
+  const response = await requestFriend(username, targetUser.username);
+  if (!response) {
+    return res.send({
+      status: 403,
+      message: "You have already sent a request!",
+    });
   }
+  res.send({
+    status: 201,
+    message: "Friend request sent!",
+  });
 });
+
 router.post("/show-pending-requests", async (req, res) => {
   const { username } = req.body;
   let results = await showPendingFriends(username);
@@ -67,20 +78,24 @@ router.post("/show-pending-requests", async (req, res) => {
     data: results,
   });
 });
+
 router.post("/accept-request", async (req, res) => {
-  const { username, friendship_unique } = req.body;
-  acceptRequest(username, friendship_unique);
+  const { username, friendship_unique, src_user } = req.body;
+  acceptRequest(username, friendship_unique, src_user);
   res.send({
     status: 201,
     message: "Friend request added",
   });
 });
+
 router.post("/my-friends", async (req, res) => {
   const { username } = req.body;
   let results = await showFriends(username);
+  console.log(results);
   res.status(201).send({
     status: 201,
     data: results,
   });
 });
+
 module.exports = router;
