@@ -2,6 +2,7 @@
 function routes(app, { urlencodedParser }) {
   app.use("/user", urlencodedParser, require("./user"));
   app.use("/post", require("./post"));
+  app.use("/message", require("./message"));
 }
 
 module.exports = routes;
