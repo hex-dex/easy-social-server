@@ -144,4 +144,5 @@ module.exports = {
   showPendingFriends,
   requestFriend,
   showOutgoingFriendRequests,
+  getFriendUnique,
 };

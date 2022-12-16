@@ -1,10 +1,10 @@
-const { Client } = require('cassandra-driver');
-const { v4: uuidv4 } = require('uuid');
+const { Client } = require("cassandra-driver");
+const { v4: uuidv4 } = require("uuid");
 
-require('dotenv').config();
+require("dotenv").config();
 const client = new Client({
   cloud: {
-    secureConnectBundle: './secure-connect-posts.zip',
+    secureConnectBundle: "./secure-connect-posts.zip",
   },
   credentials: {
     username: `${process.env.clientID}`,
@@ -24,6 +24,4 @@ exports.addPost = async (username, content) => {
   const addItem = await client.execute(
     `INSERT INTO useractivities.posts (post_ID, source_ID, post_content, date_created) VALUES ('${UUID}', '${username}', '${content}', '${new Date()}');`
   );
-  // addItem;
 };
-//get posts
