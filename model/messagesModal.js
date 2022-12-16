@@ -11,13 +11,20 @@ const client = new Client({
     password: `${process.env.clientSecret}`,
   },
 });
-const createPost = async (fromUser, toUser, msgBody, chatID) => {
+const createMessage = async (fromUser, toUser, msgBody, chatID) => {
   let date = new Date();
-  const showItems = await client.execute(
+  const createMsg = await client.execute(
     `INSERT INTO useractivities.messages (sent_from,sent_to,msg_body,created,chat_id) VALUES('${fromUser}','${toUser}','${msgBody}','${date}','${chatID}')`
   );
-  //   return showItems.rows;
+};
+const getChatMessages = async (chatID) => {
+  const showItems = await client.execute(
+    `SELECT * FROM useractivities.messages WHERE chat_id = '${chatID}'`
+  );
+  console.log(showItems.rows);
+  return showItems.rows;
 };
 module.exports = {
-  createPost,
+  createMessage,
+  getChatMessages,
 };
