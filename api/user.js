@@ -12,6 +12,7 @@ const {
   showPendingFriends,
   showFriends,
   acceptRequest,
+  showOutgoingFriendRequests,
 } = require("../model/friendsModel");
 const { createAccessToken } = require("../service/tokenServices");
 
@@ -91,6 +92,15 @@ router.post("/accept-request", async (req, res) => {
 router.post("/my-friends", async (req, res) => {
   const { username } = req.body;
   let results = await showFriends(username);
+  console.log(results);
+  res.status(201).send({
+    status: 201,
+    data: results,
+  });
+});
+router.get("/show-outgoing-requests", async (req, res) => {
+  const { username } = req.body;
+  let results = await showOutgoingFriendRequests(username);
   console.log(results);
   res.status(201).send({
     status: 201,

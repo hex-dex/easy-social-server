@@ -129,10 +129,19 @@ const acceptRequest = async function (
     )
     .catch((err) => console.log("INSERT", err));
 };
-
+const showOutgoingFriendRequests = async function (myUsername) {
+  const res = await conn
+    .promise()
+    .query(`SELECT * from friends WHERE target_user = '${myUsername}' `)
+    .then(([rows, fields]) => {
+      return rows;
+    });
+  return res;
+};
 module.exports = {
   acceptRequest,
   showFriends,
   showPendingFriends,
   requestFriend,
+  showOutgoingFriendRequests,
 };

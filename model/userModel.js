@@ -60,5 +60,4 @@ const isUserAuth = async (username, password) => {
   const isAuth = bcrypt.compareSync(password, user.password);
   return isAuth;
 };
-
 module.exports = { getUser, userExists, addUser, isUserAuth };
